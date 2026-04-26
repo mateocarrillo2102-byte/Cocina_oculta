@@ -375,6 +375,21 @@ app.post('/pedidos/crear', (req, res) => {
     });
 });
 
+app.get('/', (req, res) => {
+    db.query('SELECT id_cliente, nombre FROM cliente', (err, clientes) => {
+        // SI HAY ERROR O NO HAY CLIENTES, EVITAMOS QUE TRUENE
+        if (err) return res.status(500).send("Error en BD: " + err.message);
+        if (!clientes) clientes = []; // Si está vacío, que sea una lista vacía
+        
+        db.query('SELECT id_domiciliario, nombre FROM domiciliario WHERE disponible = 1', (err, domis) => {
+            if (!domis) domis = [];
+            
+            // ... resto de tus consultas (productos, pedidos)
+        });
+    });
+});
+
+
 app.post('/pedidos/actualizar', (req, res) => {
     db.query('UPDATE pedido SET estado = ? WHERE id_pedido = ?', [req.body.nuevo_estado, req.body.id], () => res.redirect('/'));
 });
