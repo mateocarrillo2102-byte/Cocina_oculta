@@ -45,7 +45,7 @@ const NAVBAR = `
     <a href="/historial">📜 Historial</a>
 </nav>`;
 
-aapp.get('/', (req, res) => {
+app.get('/', (req, res) => {
     // 1. Consultar Clientes
     db.query('SELECT * FROM cliente', (err, clientes) => {
         if (err) return res.status(500).send("Error en Tabla Cliente: " + err.message);
