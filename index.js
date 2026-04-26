@@ -45,71 +45,72 @@ const NAVBAR = `
     <a href="/historial">📜 Historial</a>
 </nav>`;
 
-app.get('/', (req, res) => {
-    const qClientes = "SELECT id_cliente, nombre FROM cliente";
-    const qDomi = "SELECT id_domiciliario, nombre FROM domiciliario WHERE disponible = 1";
-    const qProductos = "SELECT id_producto, nombre, precio FROM producto WHERE disponible = 1";
-    
-    // Traemos pedidos activos con sus productos concatenados para que veas qué llevan
-    const qPedidos = `
-        SELECT p.*, c.nombre as cliente, 
-        GROUP_CONCAT(CONCAT(pr.nombre, ' (x', dp.cantidad, ')') SEPARATOR ', ') as productos_detalle
-        FROM pedido p 
-        LEFT JOIN cliente c ON p.id_cliente = c.id_cliente 
-        LEFT JOIN detallepedido dp ON p.id_pedido = dp.id_pedido
-        LEFT JOIN producto pr ON dp.id_producto = pr.id_producto
-        WHERE p.estado NOT IN ('entregado', 'cancelado')
-        GROUP BY p.id_pedido
-        ORDER BY p.fecha_pedido DESC`;
+aapp.get('/', (req, res) => {
+    // 1. Consultar Clientes
+    db.query('SELECT * FROM cliente', (err, clientes) => {
+        if (err) return res.status(500).send("Error en Tabla Cliente: " + err.message);
 
-    db.query(qClientes, (err, clientes) => {
-        db.query(qDomi, (err, domis) => {
-            db.query(qProductos, (err, productos) => {
+        // 2. Consultar Domiciliarios
+        db.query('SELECT * FROM domiciliario WHERE disponible = 1', (err, domis) => {
+            if (err) return res.status(500).send("Error en Tabla Domiciliario: " + err.message);
+
+            // 3. Consultar Productos
+            db.query('SELECT * FROM producto WHERE disponible = 1', (err, productos) => {
+                if (err) return res.status(500).send("Error en Tabla Producto: " + err.message);
+
+                // 4. Consultar Pedidos
+                const qPedidos = `
+                    SELECT p.*, c.nombre as cliente 
+                    FROM pedido p 
+                    LEFT JOIN cliente c ON p.id_cliente = c.id_cliente 
+                    WHERE p.estado NOT IN ('entregado', 'cancelado') 
+                    ORDER BY p.fecha_pedido DESC`;
+
                 db.query(qPedidos, (err, pedidos) => {
-                    res.send(`${CSS} ${NAVBAR} <div class="main"><div class="card">
-                        <h2>🍳 Registrar Nuevo Pedido</h2>
-                        <form action="/pedidos/crear" method="POST" style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px;">
-                            <!-- DATOS BÁSICOS -->
-                            <select name="id_cliente" required><option value="">Cliente...</option>${clientes.map(c=>`<option value="${c.id_cliente}">${c.nombre}</option>`)}</select>
-                            <select name="id_domiciliario"><option value="">Asignar Domiciliario...</option>${domis.map(d=>`<option value="${d.id_domiciliario}">${d.nombre}</option>`)}</select>
-                            <input type="number" name="total" placeholder="Total $" step="0.01" required>
-                            
-                            <!-- SELECCIÓN DE PRODUCTO (Ahora arriba) -->
-                            <select name="id_producto" required>
-                                <option value="">Seleccionar Producto...</option>
-                                ${productos.map(pr => `<option value="${pr.id_producto}">${pr.nombre}</option>`)}
-                            </select>
-                            <input type="number" name="cantidad" value="1" min="1" placeholder="Cant.">
-                            
-                            <textarea name="observaciones" placeholder="Observaciones..." style="grid-column: span 2;"></textarea>
-                            <button class="btn" type="submit" style="grid-column: span 3;">Crear Pedido</button>
-                        </form>
+                    if (err) return res.status(500).send("Error en Tabla Pedidos: " + err.message);
 
-                        <h2>Pedidos en Curso</h2>
-                        <table>
-                            <tr><th>ID</th><th>Cliente</th><th>Productos</th><th>Total</th><th>Estado</th><th>Acción</th></tr>
-                            ${pedidos.map(p => `<tr>
-                                <td>#${p.id_pedido}</td>
-                                <td><strong>${p.cliente}</strong></td>
-                                <td><small>${p.productos_detalle || 'Sin productos'}</small></td>
-                                <td>$${p.total}</td>
-                                <td><span class="badge">${p.estado}</span></td>
-                                <td>
-                                    <form action="/pedidos/actualizar" method="POST" style="background:none; padding:0; border:none; margin:0;">
-                                        <input type="hidden" name="id" value="${p.id_pedido}">
-                                        <select name="nuevo_estado" onchange="this.form.submit()" style="font-size:0.8em;">
-                                            <option value="">Cambiar...</option>
-                                            <option value="en preparación">En preparación</option>
-                                            <option value="listo">Listo</option>
-                                            <option value="en camino">En camino</option>
-                                            <option value="entregado">✅ Entregado</option>
-                                            <option value="cancelado">❌ Cancelar</option>
-                                        </select>
-                                    </form>
-                                </td>
-                            </tr>`).join('')}
-                        </table>
-                    </div></div>`);
+                    // VALIDACIÓN DE SEGURIDAD: Si son undefined, los volvemos listas vacías
+                    const listaClientes = clientes || [];
+                    const listaDomis = domis || [];
+                    const listaProductos = productos || [];
+                    const listaPedidos = pedidos || [];
+
+                    res.send(`${CSS} ${NAVBAR} 
+                        <div class="main"><div class="card">
+                            <h2>📦 Registrar Pedido</h2>
+                            <form action="/pedidos/crear" method="POST">
+                                <select name="id_cliente" required>
+                                    <option value="">Cliente...</option>
+                                    ${listaClientes.map(c => `<option value="${c.id_cliente}">${c.nombre}</option>`).join('')}
+                                </select>
+                                
+                                <select name="id_domiciliario">
+                                    <option value="">Asignar Domiciliario...</option>
+                                    ${listaDomis.map(d => `<option value="${d.id_domiciliario}">${d.nombre}</option>`).join('')}
+                                </select>
+
+                                <select name="id_producto" required>
+                                    <option value="">Producto...</option>
+                                    ${listaProductos.map(p => `<option value="${p.id_producto}">${p.nombre}</option>`).join('')}
+                                </select>
+
+                                <input type="number" name="total" placeholder="Total $" step="0.01" value="0">
+                                <textarea name="observaciones" placeholder="Observaciones..."></textarea>
+                                <button class="btn" type="submit">Crear Pedido</button>
+                            </form>
+                            
+                            <table>
+                                <tr><th>ID</th><th>Cliente</th><th>Estado</th><th>Total</th><th>Acción</th></tr>
+                                ${listaPedidos.map(p => `<tr>
+                                    <td>#${p.id_pedido}</td>
+                                    <td>${p.cliente || 'N/A'}</td>
+                                    <td><span class="badge">${p.estado}</span></td>
+                                    <td>$${p.total}</td>
+                                    <td><small>En curso...</small></td>
+                                </tr>`).join('')}
+                            </table>
+                        </div></div>`
+                    );
                 });
             });
         });
