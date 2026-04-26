@@ -292,18 +292,19 @@ app.get('/movimientos', (req, res) => {
 
 app.get('/detalles', (req, res) => {
     const qDetalles = `
-        SELECT dp.*, p.nombre as producto, ped.fecha_pedido 
+        SELECT dp.*, p.nombre as producto, ped.id_domiciliario, d.nombre as nombre_domi
         FROM detallepedido dp 
         JOIN producto p ON dp.id_producto = p.id_producto 
         JOIN pedido ped ON dp.id_pedido = ped.id_pedido 
+        LEFT JOIN domiciliario d ON ped.id_domiciliario = d.id_domiciliario
         ORDER BY dp.id_pedido DESC`;
 
     db.query(qDetalles, (err, detalles) => {
         res.send(`${CSS} ${NAVBAR} <div class="main"><div class="card">
-            <h2>📋 Detalle de Ventas por Producto</h2>
+            <h2>📋 Detalle de Ventas y Reparto</h2>
             <table>
                 <thead>
-                    <tr><th>Pedido ID</th><th>Producto</th><th>Cantidad</th><th>Subtotal</th></tr>
+                    <tr><th>Pedido ID</th><th>Producto</th><th>Cantidad</th><th>Subtotal</th><th>Domiciliario</th></tr>
                 </thead>
                 <tbody>
                     ${detalles.map(d => `
@@ -312,6 +313,7 @@ app.get('/detalles', (req, res) => {
                             <td>${d.producto}</td>
                             <td>${d.cantidad}</td>
                             <td><strong>$${d.subtotal}</strong></td>
+                            <td>${d.nombre_domi || '<span style="color:gray;">Sin asignar</span>'}</td>
                         </tr>
                     `).join('')}
                 </tbody>
@@ -392,7 +394,26 @@ app.get('/', (req, res) => {
 
 
 app.post('/pedidos/actualizar', (req, res) => {
-    db.query('UPDATE pedido SET estado = ? WHERE id_pedido = ?', [req.body.nuevo_estado, req.body.id], () => res.redirect('/'));
+    const { id, nuevo_estado } = req.body;
+
+    // 1. Primero obtenemos el ID del domiciliario de ese pedido
+    db.query('SELECT id_domiciliario FROM pedido WHERE id_pedido = ?', [id], (err, results) => {
+        const idDomi = results[0]?.id_domiciliario;
+
+        // 2. Actualizamos el estado del pedido
+        db.query('UPDATE pedido SET estado = ? WHERE id_pedido = ?', [nuevo_estado, id], (err) => {
+            
+            // 3. Si hay un domiciliario asignado, gestionamos su disponibilidad
+            if (idDomi) {
+                if (nuevo_estado === 'entregado' || nuevo_estado === 'cancelado') {
+                    db.query('UPDATE domiciliario SET disponible = 1 WHERE id_domiciliario = ?', [idDomi]);
+                } else if (nuevo_estado === 'en camino') {
+                    db.query('UPDATE domiciliario SET disponible = 0 WHERE id_domiciliario = ?', [idDomi]);
+                }
+            }
+            res.redirect('/');
+        });
+    });
 });
 
 app.post('/clientes/crear', (req, res) => {
