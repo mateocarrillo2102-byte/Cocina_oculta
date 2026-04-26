@@ -392,7 +392,6 @@ app.get('/', (req, res) => {
     });
 });
 
-
 app.post('/pedidos/actualizar', (req, res) => {
     const { id, nuevo_estado } = req.body;
 
