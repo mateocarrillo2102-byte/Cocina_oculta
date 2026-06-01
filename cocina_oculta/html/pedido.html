@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Registro Pedido</title>
+<link rel="stylesheet" href="css/estilos.css">
+</head>
+<body>
+<div class="container">
+<h1>Registro Pedido</h1>
+<form action="php/procesar_pedido.php" method="POST">
+<label>Producto:</label>
+<select name="producto" required>
+<option value="">Seleccione</option>
+<option value="1">Hamburguesa Sencilla</option>
+<option value="2">Hamburguesa con Chorizo</option>
+<option value="3">Hamburguesa Doble</option>
+<option value="4">Hamburguesa Especial</option>
+<option value="5">Perro Sencillo</option>
+<option value="6">Perro Italiano</option>
+<option value="7">Perro Escocés</option>
+<option value="8">Perro Doble Salchicha</option>
+<option value="9">Chuzopan</option>
+<option value="10">Porción de Costilla 1/2 libra</option>
+<option value="11">Porción de Costilla 1 libra</option>
+<option value="12">Chuzo de Pollo</option>
+<option value="13">Pechuga Asada</option>
+<option value="14">Pechuga GratSinada</option>
+<option value="15">Patacón Sencillo</option>
+<option value="16">Patacón Especial</option>
+<option value="17">Picada Personal</option>
+<option value="18">Picada Dos Personas</option>
+<option value="19">Picada Familiar</option>
+<option value="20">Salchipapa Personal</option>
+<option value="21">Salchipapa Dos Personas</option>
+<option value="22">Salchipapa Familiar</option>
+</select>
+<label>Cantidad:</label>
+<input type="number" name="cantidad" min="1" required>
+<label>Nombre del Cliente:</label>
+<input type="text" name="nombre_cliente" required>
+<label >Correo Electronico</label>
+<input type="email"name = "correo" required>
+<label>Teléfono:</label>
+<input type="number" name ="telefono" required>
+<label >direccion </label>
+<input type="text" name="direccion" required>
+<input type="submit" value="Registrar Pedido">
+</form>
+</div>
+</body>
+</html>

@@ -1,0 +1,99 @@
+body {
+  background-color: black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  color: #00F5FF;
+  font-family: Arial, sans-serif;
+}
+
+/* Nota: En tu HTML usas la clase .card, no .container */
+.card {
+  text-align: center;
+  background: black;
+  padding: 25px;
+  border-radius: 10px;
+  width: 320px; /* Ancho fijo y seguro para la tarjeta */
+  box-shadow: 0 5px 15px rgba(3, 197, 231, 0.63);
+  box-sizing: border-box;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px; /* Más espacio entre bloques para que respire el diseño */
+  width: 100%;
+}
+
+/* SOLUCIÓN AL TÍTULO: Eliminado el flex que lo rompía */
+.title {
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+/* SOLUCIÓN AL DESBORDE: Ahora ocupa el 100% real del contenedor */
+.parametros {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 5px;
+  width: 100%; 
+  box-sizing: border-box;
+}
+
+input[type="email"],
+input[type="password"] {
+  width: 100%;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #00F5FF;
+  background: transparent;
+  color: #fff;
+  box-sizing: border-box; /* Evita que el padding sume tamaño extra */
+}
+
+/* SOLUCIÓN AL CHECKBOX: Alinea el cuadro y el texto correctamente */
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px;
+  width: 100%;
+  margin-top: 5px;
+  color: #ffffff;
+}
+
+.row input[type="checkbox"] {
+  width: auto; /* Evita que el checkbox intente medir el 100% */
+  margin: 0;
+}
+
+.btn {
+  background-color: #00F5FF;
+  color: #000;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 100%; /* El botón ahora ocupa todo el ancho de forma elegante */
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+.btn:hover {
+  background-color: #14b5ff;
+}
+
+.register {
+  margin-top: 20px;
+  font-size: 14px;
+   color: #ffffff;
+}
+
+.register a {
+  color: #00F5FF;
+  text-decoration: none;
+}

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Registro de Cliente</title>
+<link rel="stylesheet" href="../css/estilos.css">
+</head>
+<body>
+<div class="container">
+<h1>Registro de Cliente</h1>
+<form action="../php/reg_cliente.php" method="POST">
+<label>Nombres y Apellidos:</label>
+<input type="text" name="nombre_cliente" required>
+<label>Correo Electronico:</label>
+<input type="email" name="correo" required>
+<label>telefono:</label>
+<input type="text" name="telefono" required>
+<label >Direccion</label>
+<input type="text" name="direccion" required>
+<label>Contraseña:</label>
+<input type="password" name="contrasena" required>
+<input type="submit" value="Registrar Cliente">
+</form>
+</div>
+</body>
+</html>

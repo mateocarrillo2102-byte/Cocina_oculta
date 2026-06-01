@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Comidas Rápidas El Sitio</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+--bg:#090909;
+--card:#111111;
+--card2:#161616;
+--green:#39FF14;
+--cyan:#00F5FF;
+--pink:#FF2D95;
+--yellow:#FFE600;
+--white:#F0F0F0;
+--muted:#888;
+--border:#222;
+}
+body{
+font-family:'DM Sans',sans-serif;
+background:var(--bg);
+color:var(--white);
+min-height:100vh;
+}
+/* ── HERO ── */
+header{
+background:radial-gradient(ellipse at 60% 0%,#1a001a 0%,#000 60%);
+padding:3rem 2rem 2.5rem;
+text-align:center;
+position:relative;
+overflow:hidden;
+border-bottom:1px solid #1a1a1a;
+}
+header::before{
+content:'';
+position:absolute;
+top:0;left:0;right:0;
+height:2px;
+background:linear-gradient(90deg,var(--green),var(--cyan),var(--pink),var(--yellow));
+}
+/* LOGO CIRCLE */
+.logo-wrap{
+width:180px;height:180px;
+border-radius:50%;
+background:#000;
+border:2.5px solid var(--cyan);
+box-shadow:0 0 30px var(--cyan),0 0 60px rgba(0,245,255,.15),inset 0 0 30px rgba(0,245,255,.05);
+margin:0 auto 1.5rem;
+display:flex;align-items:center;justify-content:center;
+position:relative;
+overflow:hidden;
+}
+.logo-wrap::after{
+content:'';
+position:absolute;inset:0;
+border-radius:50%;
+border:1px solid rgba(0,245,255,.2);
+box-shadow:inset 0 0 20px rgba(0,245,255,.08);
+}
+.logo-inner{
+padding:18px;
+text-align:center;
+}
+.logo-top{
+font-family:'Orbitron',sans-serif;
+font-size:.6rem;
+letter-spacing:.18em;
+text-transform:uppercase;
+color:var(--green);
+text-shadow:0 0 8px var(--green);
+line-height:1.4;
+}
+.logo-rapidas{
+font-family:'Orbitron',sans-serif;
+font-size:.6rem;
+letter-spacing:.15em;
+color:var(--cyan);
+text-shadow:0 0 8px var(--cyan);
+}
+.logo-main{
+font-family:'Orbitron',sans-serif;
+font-size:1.15rem;
+font-weight:900;
+color:var(--pink);
+text-shadow:0 0 12px var(--pink),0 0 24px rgba(255,45,149,.4);
+letter-spacing:.04em;
+line-height:1.2;
+margin-top:4px;
+}
+.logo-burger{font-size:1.5rem;margin-top:2px;}
+.hero-tagline{
+font-size:13px;
+color:var(--muted);
+letter-spacing:.1em;
+text-transform:uppercase;
+margin-bottom:1rem;
+}
+.hero-tagline span{color:var(--yellow);text-shadow:0 0 8px var(--yellow);}
+.neon-line{
+width:120px;height:2px;
+background:linear-gradient(90deg,transparent,var(--cyan),transparent);
+box-shadow:0 0 8px var(--cyan);
+margin:.8rem auto;
+}
+/* ── NAV ── */
+nav{
+background:#0a0a0a;
+border-bottom:1px solid #1d1d1d;
+position:sticky;top:0;z-index:100;
+}
+.nav-inner{
+max-width:960px;margin:0 auto;
+padding:0 1rem;
+display:flex;gap:2px;
+overflow-x:auto;scrollbar-width:none;
+}
+.nav-inner::-webkit-scrollbar{display:none;}
+.filter-btn{
+flex-shrink:0;
+background:none;border:none;
+color:var(--muted);
+font-family:'DM Sans',sans-serif;
+font-size:13px;font-weight:500;
+padding:13px 15px;
+cursor:pointer;
+border-bottom:2px solid transparent;
+transition:all .2s;white-space:nowrap;
+}
+.filter-btn:hover{color:var(--white);}
+.filter-btn.active{color:var(--cyan);border-bottom-color:var(--cyan);text-shadow:0 0 8px var(--cyan);}
+/* ── SEARCH ── */
+.search-wrap{
+max-width:960px;margin:1.8rem auto 0;padding:0 1.5rem;
+}
+.search-box{
+display:flex;align-items:center;gap:10px;
+background:var(--card);
+border:1px solid #222;
+border-radius:10px;padding:11px 16px;
+transition:border-color .2s;
+}
+.search-box:focus-within{border-color:var(--cyan);box-shadow:0 0 12px rgba(0,245,255,.1);}
+.search-box svg{color:#555;flex-shrink:0;}
+.search-box input{
+border:none;outline:none;
+background:transparent;
+font-family:'DM Sans',sans-serif;
+font-size:15px;color:var(--white);width:100%;
+}
+.search-box input::placeholder{color:#444;}
+/* ── MAIN ── */
+.main{
+max-width:960px;margin:1.5rem auto 5rem;padding:0 1.5rem;
+}
+.section-title{
+font-family:'Orbitron',sans-serif;
+font-size:1.1rem;font-weight:700;
+letter-spacing:.06em;
+color:var(--white);
+margin:2.5rem 0 1.2rem;
+display:flex;align-items:center;gap:12px;
+}
+.section-title::after{content:'';flex:1;height:1px;background:#1e1e1e;}
+.section-title .line-accent{
+display:inline-block;width:28px;height:2px;
+box-shadow:0 0 6px currentColor;
+border-radius:2px;
+}
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fill,minmax(210px,1fr));
+gap:14px;
+}
+/* ── CARD ── */
+.card{
+background:var(--card);
+border:1px solid #1c1c1c;
+border-radius:14px;
+overflow:hidden;
+display:flex;flex-direction:column;
+transition:transform .2s,border-color .25s,box-shadow .25s;
+animation:fadeUp .4s ease both;
+}
+.card:hover{
+transform:translateY(-5px);
+border-color:#333;
+box-shadow:0 16px 40px rgba(0,0,0,.5);
+}
+.card-img{
+height:120px;
+display:flex;align-items:center;justify-content:center;
+font-size:3.6rem;
+user-select:none;
+position:relative;
+overflow:hidden;
+}
+.card-img::after{
+content:'';
+position:absolute;bottom:0;left:0;right:0;height:40px;
+background:linear-gradient(transparent,var(--card));
+}
+/* categoría → color del glow y acento */
+.cat-perro .card-img{background:radial-gradient(circle at 50% 60%,#1a0f00,#0a0a0a);}
+.cat-perro .card:hover{border-color:#FFB300;box-shadow:0 16px 40px rgba(255,179,0,.08);}
+.cat-perro .cat-dot,.cat-perro .section-title .line-accent{background:var(--yellow);color:var(--yellow);}
+.cat-perro .section-title{color:var(--yellow);text-shadow:0 0 12px rgba(255,230,0,.4);}
+.cat-hamburguesa .card-img{background:radial-gradient(circle at 50% 60%,#1a0008,#0a0a0a);}
+.cat-hamburguesa .card:hover{border-color:var(--pink);box-shadow:0 16px 40px rgba(255,45,149,.08);}
+.cat-hamburguesa .section-title{color:var(--pink);text-shadow:0 0 12px rgba(255,45,149,.4);}
+.cat-hamburguesa .section-title .line-accent{background:var(--pink);color:var(--pink);}
+.cat-pollo .card-img{background:radial-gradient(circle at 50% 60%,#001a08,#0a0a0a);}
+.cat-pollo .card:hover{border-color:var(--green);box-shadow:0 16px 40px rgba(57,255,20,.08);}
+.cat-pollo .section-title{color:var(--green);text-shadow:0 0 12px rgba(57,255,20,.4);}
+.cat-pollo .section-title .line-accent{background:var(--green);color:var(--green);}
+.cat-bebida .card-img{background:radial-gradient(circle at 50% 60%,#001a1a,#0a0a0a);}
+.cat-bebida .card:hover{border-color:var(--cyan);box-shadow:0 16px 40px rgba(0,245,255,.08);}
+.cat-bebida .section-title{color:var(--cyan);text-shadow:0 0 12px rgba(0,245,255,.4);}
+.cat-bebida .section-title .line-accent{background:var(--cyan);color:var(--cyan);}
+.cat-extra .card-img{background:radial-gradient(circle at 50% 60%,#0f001a,#0a0a0a);}
+.cat-extra .card:hover{border-color:#bf5fff;box-shadow:0 16px 40px rgba(191,95,255,.08);}
+.cat-extra .section-title{color:#bf5fff;text-shadow:0 0 12px rgba(191,95,255,.4);}
+.cat-extra .section-title .line-accent{background:#bf5fff;color:#bf5fff;}
+.card-body{padding:12px 15px 15px;flex:1;display:flex;flex-direction:column;gap:5px;}
+.card-name{font-weight:600;font-size:14.5px;color:var(--white);line-height:1.3;}
+.card-desc{font-size:12px;color:#666;line-height:1.55;flex:1;}
+.card-footer{display:flex;align-items:center;justify-content:space-between;margin-top:10px;}
+.card-price{
+font-family:'Orbitron',sans-serif;
+font-size:1.1rem;font-weight:700;
+color:var(--cyan);
+text-shadow:0 0 10px rgba(0,245,255,.5);
+}
+.card-tag{
+font-size:10px;font-weight:600;
+padding:3px 8px;border-radius:4px;
+letter-spacing:.06em;text-transform:uppercase;
+}
+.tag-hot {background:rgba(255,45,149,.15);color:var(--pink);border:1px solid rgba(255,45,149,.3);}
+.tag-new {background:rgba(57,255,20,.1);color:var(--green);border:1px solid rgba(57,255,20,.25);}
+.tag-best{background:rgba(255,230,0,.1);color:var(--yellow);border:1px solid rgba(255,230,0,.25);}
+.tag-combo{background:rgba(191,95,255,.1);color:#bf5fff;border:1px solid rgba(191,95,255,.25);}
+/* ── EMPTY ── */
+.empty{display:none;text-align:center;padding:4rem 1rem;}
+.empty p{margin-top:8px;font-size:14px;color:var(--muted);}
+/* ── FOOTER ── */
+footer{
+background:#080808;
+border-top:1px solid #181818;
+text-align:center;
+padding:1.5rem;
+font-size:12px;color:#444;
+}
+footer strong{color:var(--cyan);}
+@keyframes fadeUp{
+from{opacity:0;transform:translateY(14px);}
+to{opacity:1;transform:translateY(0);}
+}
+</style>
+</head>
+<body>
+<!-- HERO -->
+<header>
+<img src="img/logo.jpeg" alt="Logo Cocina Oculta" width = "120" class="logo-wrap">
+<input type="button" value="Cerrar Sesión" onclick="window.location.href='index.html'" style="
+float:right;
+background: #00F5FF;
+border: none;
+color: #000;
+font-weight: 600;
+padding: 5px 10px;
+cursor: pointer;
+font-family: 'DM Sans', sans-serif;
+width: 15%;
+border-radius: 8px;
+position:absolute;top:20px;right:20px;
+">
+</header>
+<!-- FILTROS -->
+<nav>
+<div class="nav-inner">
+<button class="filter-btn active" data-cat="todos">Todos</button>
+<button class="filter-btn" data-cat="perro">Perros</button>
+<button class="filter-btn" data-cat="hamburguesa">Hamburguesas</button>
+<button class="filter-btn" data-cat="pollo">Pollos</button>
+<button class="filter-btn" data-cat="bebida">Bebidas</button>
+<button class="filter-btn" data-cat="extra">Extras</button>
+</div>
+</nav>
+<!-- BUSCADOR -->
+<div class="search-wrap">
+<div class="search-box">
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+<input id="searchInput" type="text" placeholder="Buscar en el menú..."/>
+</div>
+</div>
+<main class="main" id="menuMain"></main>
+<div class="empty" id="emptyState"><div style="font-size:3rem">😕</div><p id="emptyMsg"></p></div>
+<div class="pedido" style="
+display: flex;
+justify-content: center;
+margin: 0 auto;
+background-color: #00F5FF;
+padding: 3px;
+border-radius: 10px;
+width: 300px;
+box-shadow: 0 5px 15px rgba(3, 197, 231, 0.63);">
+<input type="button" value="Registrar Pedido" onclick="window.location.href='pedido.html'" style="
+background: #00F5FF;
+border: none;
+color: #000;
+font-weight: 600;
+padding: 8px 20px;
+cursor: pointer;
+font-family: 'DM Sans', sans-serif;
+width: 100%;
+border-radius: 8px;
+">
+</div>
+<footer><strong>Comidas Rápidas El Sitio</strong> · Todos los precios en COP · IVA incluido</footer>
+<script>
+const productos = [
+{cat:"perro", nombre:"Perro Clásico", desc:"Salchicha, mostaza, kétchup y cebolla caramelizada", precio:8000, emoji:"🌭", tag:"best"},
+{cat:"perro", nombre:"Perro Especial", desc:"Salchicha, papas pay, queso fundido, jamón y salsas", precio:12000, emoji:"🌭", tag:"hot"},
+{cat:"perro", nombre:"Perro Hawaiano", desc:"Salchicha, piña, queso mozzarella y salsa rosada", precio:11000, emoji:"🌭", tag:"new"},
+{cat:"perro", nombre:"Perro Colombiano", desc:"Salchicha, chifles, queso costeño, salsas y ají", precio:13000, emoji:"🌭", tag:"best"},
+{cat:"hamburguesa", nombre:"Hamburguesa Sencilla", desc:"Carne de res, lechuga, tomate, cebolla y mostaza", precio:12000, emoji:"🍔", tag:""},
+{cat:"hamburguesa", nombre:"Doble Carne", desc:"Doble carne, queso cheddar, pepinillos y salsa especial",precio:18000, emoji:"🍔", tag:"hot"},
+{cat:"hamburguesa", nombre:"Pollo Crispy", desc:"Pechuga apanada, repollo morado y mayonesa de ajo", precio:15000, emoji:"🍔", tag:"new"},
+{cat:"hamburguesa", nombre:"BBQ Bacon", desc:"Carne, tocino ahumado, cebolla crispy y salsa BBQ", precio:20000, emoji:"🍔", tag:"best"},
+{cat:"hamburguesa", nombre:"Smash Burger", desc:"Dos carnes aplastadas, queso americano y pepinillos", precio:22000, emoji:"🍔", tag:"new"},
+{cat:"pollo", nombre:"Alitas x6", desc:"Alitas a la plancha con salsa BBQ o picante", precio:16000, emoji:"🍗", tag:"best"},
+{cat:"pollo", nombre:"Pechuga Grillada", desc:"Pechuga jugosa con ensalada y papas fritas", precio:18000, emoji:"🍗", tag:""},
+{cat:"pollo", nombre:"Combo Pollo", desc:"2 presas, arroz, ensalada y gaseosa", precio:25000, emoji:"🍗", tag:"combo"},
+{cat:"bebida", nombre:"Gaseosa 350ml", desc:"Coca-Cola, Sprite, Manzana o Uva", precio:3500, emoji:"🥤", tag:""},
+{cat:"bebida", nombre:"Agua Botella", desc:"Agua pura sin gas 600ml", precio:2500, emoji:"💧", tag:""},
+{cat:"bebida", nombre:"Jugo Natural", desc:"Mango, lulo, maracuyá o mora — con leche o agua", precio:5000, emoji:"🧃", tag:"new"},
+{cat:"bebida", nombre:"Malteada", desc:"Chocolate, vainilla o fresa · cremosa y helada", precio:8000, emoji:"🥛", tag:"best"},
+{cat:"extra", nombre:"Papas Fritas", desc:"Porción grande con salsas a elegir", precio:7000, emoji:"🍟", tag:""},
+{cat:"extra", nombre:"Aros de Cebolla", desc:"Crujientes y doraditos con dip de queso", precio:8000, emoji:"🧅", tag:"new"},
+{cat:"extra", nombre:"Salsa Extra", desc:"Kétchup, mostaza, mayo, BBQ o picante", precio:1000, emoji:"🫙", tag:""},
+];
+const catMeta={
+perro: {label:"Perros Calientes"},
+hamburguesa:{label:"Hamburguesas"},
+pollo: {label:"Pollos"},
+bebida: {label:"Bebidas"},
+extra: {label:"Extras"},
+};
+const tagLabels={hot:"Popular",new:"Nuevo",best:"Favorito",combo:"Combo"};
+function fmt(n){return"$"+n.toLocaleString("es-CO");}
+function highlight(text,q){
+if(!q)return text;
+const re=new RegExp(`(${q.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")})`,"gi");
+return text.replace(re,'<mark style="background:#FFE600;color:#000;border-radius:2px;padding:0 2px;">$1</mark>');
+}
+function renderMenu(lista,query){
+const main=document.getElementById("menuMain");
+const empty=document.getElementById("emptyState");
+main.innerHTML="";
+if(!lista.length){
+empty.style.display="block";
+document.getElementById("emptyMsg").textContent=query?`No encontramos "${query}" en el menú.`:"Sin productos.";
+return;
+}
+empty.style.display="none";
+const grupos={};
+lista.forEach(p=>{if(!grupos[p.cat])grupos[p.cat]=[];grupos[p.cat].push(p);});
+let delay=0;
+Object.keys(grupos).forEach(cat=>{
+const sec=document.createElement("div");
+sec.className=`cat-${cat}`;
+const title=document.createElement("h2");
+title.className="section-title";
+title.innerHTML=`${catMeta[cat].label}<span class="line-accent"></span>`;
+sec.appendChild(title);
+const grid=document.createElement("div");
+grid.className="grid";
+grupos[cat].forEach(p=>{
+const card=document.createElement("div");
+card.className="card";
+card.style.animationDelay=(delay*55)+"ms";
+delay++;
+const tagHtml=p.tag&&tagLabels[p.tag]?`<span class="card-tag tag-${p.tag}">${tagLabels[p.tag]}</span>`:"";
+card.innerHTML=`
+<div class="card-img">${p.emoji}</div>
+<div class="card-body">
+<div class="card-name">${highlight(p.nombre,query)}</div>
+<div class="card-desc">${p.desc}</div>
+<div class="card-footer">
+<span class="card-price">${fmt(p.precio)}</span>
+${tagHtml}
+</div>
+</div>`;
+grid.appendChild(card);
+});
+sec.appendChild(grid);
+main.appendChild(sec);
+});
+}
+let currentCat="todos",currentQuery="";
+function applyFilters(){
+let lista=productos;
+if(currentCat!=="todos")lista=lista.filter(p=>p.cat===currentCat);
+if(currentQuery)lista=lista.filter(p=>
+p.nombre.toLowerCase().includes(currentQuery)||
+p.desc.toLowerCase().includes(currentQuery)
+);
+renderMenu(lista,currentQuery);
+}
+document.querySelectorAll(".filter-btn").forEach(btn=>{
+btn.addEventListener("click",()=>{
+document.querySelectorAll(".filter-btn").forEach(b=>b.classList.remove("active"));
+btn.classList.add("active");
+currentCat=btn.dataset.cat;
+applyFilters();
+});
+});
+document.getElementById("searchInput").addEventListener("input",function(){
+currentQuery=this.value.trim().toLowerCase();
+applyFilters();
+});
+applyFilters();
+</script>
+</body>
+</html>
